@@ -38,8 +38,6 @@ namespace lab1_7
             Console.WriteLine("Проверяем еще разок его наличие\n");
             tmp = group.Search("11-800-555-35-35", "Phone");
             Console.WriteLine(tmp is null ? "не найдено" : "найден");
-
-
         }
     }
 }

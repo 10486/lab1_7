@@ -16,6 +16,11 @@ namespace Lib
         /// <returns>Student если найдено совпадение, null если совпадений нет</returns>
         public Student Search(object value, string prop = "FullName")
         {
+            if (value is null)
+            {
+                throw new ArgumentNullException($"{nameof(value)} is null");
+            }
+
             if (string.IsNullOrEmpty(prop))
             {
                 throw new ArgumentException($"Invalid argument {nameof(prop)}");
@@ -23,21 +28,33 @@ namespace Lib
 
             try
             {
-                // Получяем объект Type методом GetType, получаем информацию о свойстве методом GetProperty,
-                // получаем значение свойства объекта при помощи GetValue и сравниваем его с value,
-                // используя Equals
-                return Students.First(i => i.GetType().GetProperty(prop).GetValue(i).Equals(value));
+                // Возможно он спросит почему ты так сделал, ниже я расписал почему
+
+                // Можно было создать несколько методов сортировки SortBy...,
+                // но это значит - больше кода - больше потенциальных ошибок.
+                // Еще вариант передать компаратор, но писать отдельный класс/функицю 
+                // для отдельной сортировки свойств простого объекта - слишком нудно
+                return Students.First(
+                        i => i.
+                        GetType().         // Получяем объект Type 
+                        GetProperty(prop). // получаем информацию о свойстве
+                        GetValue(i).       // получаем значение свойства объекта
+                        Equals(value)      // сравниваем его с value
+                    );
             }
             catch (InvalidOperationException e)
             {
+
                 if (e.Message == "Sequence contains no matching element")
                 {
                     return null;
                 }
+
                 else
                 {
                     throw e;
                 }
+
             }
 
         }
@@ -70,6 +87,7 @@ namespace Lib
         {
             return Students.GetEnumerator();
         }
+
         public override string ToString()
         {
             string res = "";

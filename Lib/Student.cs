@@ -13,22 +13,27 @@ namespace Lib
 
         public Student(string fullName, DateTime birthday, string phone)
         {
+            #region Проверки
             if (string.IsNullOrEmpty(fullName))
             {
                 throw new ArgumentException($"Invalid argument {nameof(fullName)}");
             }
+
             if (string.IsNullOrEmpty(phone))
             {
                 throw new ArgumentException($"Invalid argument {nameof(phone)}");
             }
+
             if(DateTime.Now < birthday)
             {
                 throw new ArgumentOutOfRangeException("birthday", "Is student from future?");
             }
+            #endregion
             FullName = fullName;
             Birthday = birthday;
             Phone = phone;
         }
+
         public override string ToString()
         {
             return $"FullName:{FullName}\nBirthday:{Birthday:d}\nPhone:{Phone}\n";
